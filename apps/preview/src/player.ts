@@ -38,5 +38,5 @@ async function drain() {
 }
 const events = new EventSource('/api/playback/events');
 events.addEventListener('playback', event => { pending = JSON.parse((event as MessageEvent).data); void drain(); });
-events.onerror = () => { player?.pause(); error.textContent = '再生サービスへ再接続しています…'; };
+events.onerror = () => { player?.pause(); error.textContent = 'Reconnecting to the playback service…'; };
 window.addEventListener('pagehide', () => { events.close(); player?.dispose(); });

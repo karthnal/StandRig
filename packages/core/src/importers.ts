@@ -46,10 +46,10 @@ export interface PsdImportOptions {
 }
 
 export async function createRigFromPsdFile(file: File, options: PsdImportOptions = {}): Promise<RigDocument> {
-  if (!/\.psd$/i.test(file.name)) throw new Error("素材の読み込みはPSDのみ対応しています。");
+  if (!/\.psd$/i.test(file.name)) throw new Error("Artwork import only supports PSD files.");
   const buffer = await file.arrayBuffer();
   const header = new DataView(buffer);
-  if (buffer.byteLength < 26 || header.getUint32(0) !== 0x38425053 || header.getUint16(4) !== 1) throw new Error("有効なPSDファイルを選択してください。PSBは未対応です。");
+  if (buffer.byteLength < 26 || header.getUint32(0) !== 0x38425053 || header.getUint16(4) !== 1) throw new Error("Please select a valid PSD file. PSB is not supported.");
   let psd: PsdLikeDocument;
   try {
     psd = readPsd(buffer, {
@@ -219,7 +219,7 @@ export async function createRigFromPsdFile(file: File, options: PsdImportOptions
 
   const drawableLayers = report.layers.filter(layer => layer.kind === "image" && layer.hasPixels);
   if (drawableLayers.length < 2) {
-    throw new Error("パーツ分け済みPSDのみ対応しています。描画内容のある独立した画像レイヤーを2つ以上用意してください。統合画像・単一レイヤーPSDは読み込めません。");
+    throw new Error("Only layer-separated PSD files are supported. Provide two or more separate image layers with visible content. Flattened or single-layer PSDs cannot be loaded.");
   }
 
   finalizeImportReport(report);

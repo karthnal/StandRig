@@ -22,11 +22,11 @@ test('layered PSD preserves separate part names and pixels', async()=>{
   assert.ok(rig.assets.every(a=>a.src.startsWith('data:image/png;base64,')));
 });
 test('flattened, single or empty extra layer does not pass parts requirement',async()=>{
-  for(const layers of [[],[layer('Single')],[layer('Single'),layer('Empty',0)]]) await assert.rejects(()=>createRigFromPsdFile(psd(layers)),/パーツ分け済みPSDのみ/);
+  for(const layers of [[],[layer('Single')],[layer('Single'),layer('Empty',0)]]) await assert.rejects(()=>createRigFromPsdFile(psd(layers)),/Only layer-separated PSD/);
 });
 test('PNG and invalid/PSB headers rejected before image import',async()=>{
-  await assert.rejects(()=>createRigFromPsdFile(new File([new Uint8Array(32)],'image.png')),/PSDのみ/);
-  await assert.rejects(()=>createRigFromPsdFile(new File([new Uint8Array(32)],'bad.psd')),/有効なPSD/);
+  await assert.rejects(()=>createRigFromPsdFile(new File([new Uint8Array(32)],'image.png')),/only supports PSD/);
+  await assert.rejects(()=>createRigFromPsdFile(new File([new Uint8Array(32)],'bad.psd')),/valid PSD/);
   const bytes=new Uint8Array(await psd([layer('A'),layer('B')]).arrayBuffer()); bytes[5]=2;
-  await assert.rejects(()=>createRigFromPsdFile(new File([bytes],'large.psd')),/PSBは未対応/);
+  await assert.rejects(()=>createRigFromPsdFile(new File([bytes],'large.psd')),/PSB is not supported/);
 });
