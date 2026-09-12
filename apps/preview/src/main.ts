@@ -7,11 +7,11 @@ import { parameterDefinitionsForRig, previewParameterValuesForRig } from '@stand
 import type { ParameterValues, RigDocument } from '@standrig/core/types';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-<header><div><span class="eyebrow">AI MODELING WORKSPACE</span><h1>StandRig <span>Modeling & Playback</span></h1></div><a id="player-link" href="/player" target="_blank" class="badge">再生画面を開く ↗</a></header>
-<main><section class="stage-panel"><div class="stage-heading"><h2 id="model-name">読み込み中…</h2><button id="reload">再読み込み</button></div><div class="motion-controls"><label>描画 <select id="renderer" aria-label="描画方式"><option value="canvas">標準</option><option value="webgl">GPU（試験版）</option></select></label><span id="renderer-status" role="status"></span><label>動作デモ <select id="demo-mode" aria-label="動作デモの種類"><option value="showcase-active">Showcase — Fast &amp; Wide</option><option value="mouse-expression">Mouse + Expressions</option></select></label><button id="demo" aria-pressed="false" disabled>デモを開始</button><p id="demo-status" role="status">モデルを読み込んでください。</p></div><div class="canvas-wrap"><canvas width="800" height="900" aria-label="モデルプレビュー"></canvas><div id="empty"><b>素材から、動くモデルへ。</b><p>パーツ分け済みPSDを読み込んで始めます。</p></div></div><p class="caption">動作デモはこの画面と「再生画面」に反映されます。パラメータ操作はモデルの保存内容を変更しません。</p></section>
-<aside><section><h2>Cubism Bridge</h2><p>設定方法: docs/CUBISM-BRIDGE.md</p><button id="bridge-check">接続状態を確認</button><pre id="bridge-status" role="status">未確認</pre></section><section><h2>素材を読み込む</h2><p>対応素材：パーツ分け済みPSD。読み込み前のモデルは自動でチェックポイントに保存します。</p><label class="file-label">PSDを選択<input id="files" type="file" accept=".psd"></label><p id="selection">ファイル未選択</p><button id="import" class="primary" disabled>PSDを読み込む</button><button id="export">モデルJSONを書き出す</button><button id="export-portable">画像込みモデルJSONを書き出す</button><p>別アプリへの持ち出しには「画像込み」を使用します。保存済みのモデルとパーツ画像を1ファイルにまとめます。PSDは不要です。</p><button id="sample">サンプルを試す</button></section>
-<section><h2>AIへ渡す入口</h2><code id="api-url"></code><p>MCP接続の設定は <b>docs/MCP.md</b>、操作手順は <b>AI_OPERATING_GUIDE.md</b> を参照してください。</p><button id="qa">数値QAを実行</button><pre id="status" role="status" aria-live="polite">起動中…</pre></section>
-<section><div class="stage-heading"><h2>姿勢・再生</h2><button id="reset">初期値</button></div><button id="play">再生</button> <button id="pause">一時停止</button><div id="params"></div></section><section id="motion-panel"><h2>モーション</h2><p>StandRigモーションJSONを読み込みます。Live2D形式の変換は今後対応予定です。</p><label class="file-label">モーションJSONを選択<input id="motion-file" type="file" accept=".json"></label><p id="motion-status" role="status">未読込</p><button id="motion-play" disabled>モーション再生</button><button id="motion-pause" disabled>モーション一時停止</button><button id="motion-stop" disabled>モーション停止</button><label>再生位置 <input id="motion-time" aria-label="モーション再生位置" type="range" min="0" max="1" step="0.01" value="0" disabled></label><label>速度 <input id="motion-speed" aria-label="モーション速度" type="number" min="0.1" max="4" step="0.1" value="1" disabled></label><label><input id="motion-loop" type="checkbox" disabled>ループ</label><button id="motion-export" disabled>モーションJSONを書き出す</button></section></aside></main>`;
+<header><div><span class="eyebrow">AI MODELING WORKSPACE</span><h1>StandRig <span>Modeling & Playback</span></h1></div><a id="player-link" href="/player" target="_blank" class="badge">Open playback view ↗</a></header>
+<main><section class="stage-panel"><div class="stage-heading"><h2 id="model-name">Loading…</h2><button id="reload">Reload</button></div><div class="motion-controls"><label>Renderer <select id="renderer" aria-label="Rendering method"><option value="canvas">Standard</option><option value="webgl">GPU (experimental)</option></select></label><span id="renderer-status" role="status"></span><label>Motion demo <select id="demo-mode" aria-label="Motion demo type"><option value="showcase-active">Showcase — Fast &amp; Wide</option><option value="mouse-expression">Mouse + Expressions</option></select></label><button id="demo" aria-pressed="false" disabled>Start demo</button><p id="demo-status" role="status">Please load a model.</p></div><div class="canvas-wrap"><canvas width="800" height="900" aria-label="Model preview"></canvas><div id="empty"><b>From artwork to a moving model.</b><p>Load a layer-separated PSD to get started.</p></div></div><p class="caption">The motion demo is reflected in this view and the playback view. Adjusting parameters does not change the model's saved contents.</p></section>
+<aside><section><h2>Cubism Bridge</h2><p>Setup guide: docs/CUBISM-BRIDGE.md</p><button id="bridge-check">Check connection status</button><pre id="bridge-status" role="status">Not checked</pre></section><section><h2>Load artwork</h2><p>Supported artwork: layer-separated PSD. The current model is automatically saved to a checkpoint before loading.</p><label class="file-label">Select PSD<input id="files" type="file" accept=".psd"></label><p id="selection">No file selected</p><button id="import" class="primary" disabled>Load PSD</button><button id="export">Export model JSON</button><button id="export-portable">Export model JSON with images</button><p>Use “with images” to take the model to another app. It bundles the saved model and part images into a single file — no PSD required.</p><button id="sample">Try a sample</button></section>
+<section><h2>AI entry point</h2><code id="api-url"></code><p>For MCP connection setup see <b>docs/MCP.md</b>, and for operating steps see <b>AI_OPERATING_GUIDE.md</b>.</p><button id="qa">Run numeric QA</button><pre id="status" role="status" aria-live="polite">Starting…</pre></section>
+<section><div class="stage-heading"><h2>Pose &amp; Playback</h2><button id="reset">Defaults</button></div><button id="play">Play</button> <button id="pause">Pause</button><div id="params"></div></section><section id="motion-panel"><h2>Motion</h2><p>Loads a StandRig motion JSON. Live2D-format conversion is planned for a future release.</p><label class="file-label">Select motion JSON<input id="motion-file" type="file" accept=".json"></label><p id="motion-status" role="status">Not loaded</p><button id="motion-play" disabled>Play motion</button><button id="motion-pause" disabled>Pause motion</button><button id="motion-stop" disabled>Stop motion</button><label>Position <input id="motion-time" aria-label="Motion playback position" type="range" min="0" max="1" step="0.01" value="0" disabled></label><label>Speed <input id="motion-speed" aria-label="Motion speed" type="number" min="0.1" max="4" step="0.1" value="1" disabled></label><label><input id="motion-loop" type="checkbox" disabled>Loop</label><button id="motion-export" disabled>Export motion JSON</button></section></aside></main>`;
 const canvas = document.querySelector('canvas')!;
 const status = document.querySelector<HTMLPreElement>('#status')!;
 const filesInput = document.querySelector<HTMLInputElement>('#files')!;
@@ -30,7 +30,7 @@ function applyRenderer() {
 rendererSelect.onchange = applyRenderer;
 setInterval(() => {
   const state = runtime?.rendererStatus;
-  const text = rendererSelect.value !== 'webgl' ? '' : state?.status === 'ready' ? 'GPU描画中（画質検証中）' : '標準描画で代替中';
+  const text = rendererSelect.value !== 'webgl' ? '' : state?.status === 'ready' ? 'GPU rendering (image quality under review)' : 'Falling back to standard rendering';
   const label = document.querySelector('#renderer-status')!;
   if (label.textContent !== text) label.textContent = text;
 }, 1000);
@@ -110,14 +110,14 @@ function applyState() {
   const demo = latest.demo;
   const active = !!demo?.active;
   demoButton.disabled = !demo?.parameterIds.length;
-  demoButton.textContent = active ? 'デモを停止' : 'デモを開始';
+  demoButton.textContent = active ? 'Stop demo' : 'Start demo';
   demoButton.setAttribute('aria-pressed', String(active));
   if (active) demoMode.value = demo!.mode;
   canvas.style.cursor = active && demo?.mode === 'mouse-expression' ? 'crosshair' : '';
   document.querySelector('#demo-status')!.textContent = !demo?.parameterIds.length
-    ? '動きの設定がありません。サンプルを試すか、AIでモデリングしてください。'
-    : active ? (demo.mode === 'mouse-expression' ? 'プレビュー上でマウスを動かすと追従します。瞬き・ウィンク・口の動きは自動です。' : 'Showcase再生中：顔・体・視線・表情を自動で動かします。')
-    : '開始前の姿勢は停止時に復元します。動きが設定された部位で確認できます。';
+    ? 'No motion is configured. Try a sample, or model it with AI.'
+    : active ? (demo.mode === 'mouse-expression' ? 'Move the mouse over the preview and the model follows it. Blinking, winking, and mouth movement are automatic.' : 'Showcase playing: face, body, gaze, and expressions animate automatically.')
+    : 'The pose before starting is restored when stopped. You can check it on the parts that have motion configured.';
   render();
 }
 function reload() {
@@ -132,7 +132,7 @@ function reload() {
     document.querySelector<HTMLElement>('#empty')!.hidden = rig.assets.length > 0;
     qaButton.disabled = rig.assets.length === 0;
     parameters(); applyState(); render();
-    status.textContent = rig.assets.length ? `${rig.parts.length} parts / ${rig.assets.length} assets\n読み込み完了` : 'パーツ分け済みPSDを読み込むか、サンプルを試してください。';
+    status.textContent = rig.assets.length ? `${rig.parts.length} parts / ${rig.assets.length} assets\nLoad complete` : 'Load a layer-separated PSD, or try a sample.';
   });
   return reloadQueue;
 }
@@ -143,13 +143,13 @@ async function importModel(document: RigDocument) {
   return post('/api/modeling/transaction', {kind:'import',rig:document,expectedRevision:context.revision,commit:true,qa:{poses:['neutral'],regions:['full'],width:240,height:240,physics:false}});
 }
 function busy(value: boolean) { importing = value; importButton.disabled = value || !filesInput.files?.length; sampleButton.disabled = value; }
-filesInput.onchange = () => { document.querySelector('#selection')!.textContent = filesInput.files?.[0]?.name ?? 'ファイル未選択'; busy(importing); };
+filesInput.onchange = () => { document.querySelector('#selection')!.textContent = filesInput.files?.[0]?.name ?? 'No file selected'; busy(importing); };
 importButton.onclick = async () => {
   const files = Array.from(filesInput.files ?? []);
   if (importing || !files.length) return;
-  busy(true); status.textContent = 'PSDを読み込んでいます…';
+  busy(true); status.textContent = 'Loading PSD…';
   try {
-    if (files.length !== 1 || !/\.psd$/i.test(files[0].name)) throw new Error('パーツ分け済みPSDを1ファイル選択してください。');
+    if (files.length !== 1 || !/\.psd$/i.test(files[0].name)) throw new Error('Please select a single layer-separated PSD file.');
     const imported = await createRigFromPsdFile(files[0]);
     await importModel(imported); await reload();
   } catch (error) { report(error); } finally { busy(false); }
@@ -167,25 +167,25 @@ const portableExport = document.querySelector<HTMLButtonElement>('#export-portab
 portableExport.onclick = async () => {
   if (importing || portableExport.disabled) return;
   portableExport.disabled = true;
-  status.textContent = 'パーツ画像を含めて書き出しています…';
+  status.textContent = 'Exporting, including part images…';
   try {
     const response = await fetch('/api/bundle', { cache: 'no-store' });
-    if (!response.ok) throw new Error(`モデルの書き出しに失敗しました (${response.status})`);
+    if (!response.ok) throw new Error(`Failed to export the model (${response.status})`);
     const bundle = await response.json();
     if (bundle.format !== 'standrig-bundle' || bundle.version !== 1 || !Array.isArray(bundle.rig?.parts) || !Array.isArray(bundle.rig?.assets)
       || !bundle.rig.assets.every((asset: {src?: string}) => typeof asset.src === 'string' && asset.src.startsWith('data:image/png;base64,'))) {
-      throw new Error('画像込みモデルを取得できませんでした。PNG素材とモデルを確認してください。');
+      throw new Error('Could not retrieve the model with images. Check the PNG artwork and the model.');
     }
     const url = URL.createObjectURL(new Blob([JSON.stringify(bundle.rig, null, 2)], { type: 'application/json' }));
     const link = document.createElement('a');
     link.href = url; link.download = 'model.standrig.json'; link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    status.textContent = '画像込みモデルJSONのダウンロードを開始しました。保存先はブラウザのダウンロード設定に従います。';
+    status.textContent = 'Started downloading the model JSON with images. The save location follows your browser\'s download settings.';
   } catch (error) { report(error); }
   finally { portableExport.disabled = false; }
 };
 qaButton.onclick = async () => {
-  qaButton.disabled = true; status.textContent = '数値QAを実行しています…';
+  qaButton.disabled = true; status.textContent = 'Running numeric QA…';
   try {
     const response = await fetch('/api/qa/check', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ poseSamples: [{ poseId: 'preview', values }], regions: ['full'], width: 240, height: 240, physics: false }) });
     status.textContent = JSON.stringify(await response.json(), null, 2);
@@ -198,7 +198,7 @@ const motionLoop = document.querySelector<HTMLInputElement>('#motion-loop')!;
 function updateMotion() {
   const m = latest?.motion;
   for (const id of ['play','pause','stop','time','speed','loop','export']) document.querySelector<HTMLInputElement>('#motion-'+id)!.disabled = !m?.loaded;
-  document.querySelector('#motion-status')!.textContent = m?.loaded ? `${m.name} — ${m.time.toFixed(2)} / ${m.duration.toFixed(2)} 秒・${m.running ? '再生中' : m.ended ? '再生終了' : m.active ? '一時停止' : '停止'}` : '未読込';
+  document.querySelector('#motion-status')!.textContent = m?.loaded ? `${m.name} — ${m.time.toFixed(2)} / ${m.duration.toFixed(2)} s · ${m.running ? 'Playing' : m.ended ? 'Ended' : m.active ? 'Paused' : 'Stopped'}` : 'Not loaded';
   motionTime.max = String(m?.duration ?? 1);
   if (document.activeElement !== motionTime) motionTime.value = String(m?.time ?? 0);
   if (document.activeElement !== motionSpeed) motionSpeed.value = String(m?.speed ?? 1);
@@ -207,9 +207,9 @@ function updateMotion() {
 motionFile.onchange = async () => {
   try {
     const file = motionFile.files?.[0]; if (!file) return;
-    if (file.size > 1024*1024) throw new Error('モーションJSONは1 MiB以下にしてください。');
+    if (file.size > 1024*1024) throw new Error('The motion JSON must be 1 MiB or smaller.');
     await post('/api/playback/motion', {action:'load',clip:JSON.parse(await file.text())});
-    status.textContent = 'モーションを読み込みました。再生ボタンで開始します。';
+    status.textContent = 'Motion loaded. Press play to start.';
   } catch (error) { report(error); } finally { motionFile.value = ''; }
 };
 for (const action of ['play','pause','stop']) document.querySelector<HTMLButtonElement>('#motion-'+action)!.onclick = () => { void post('/api/playback/motion',{action}).catch(report); };
@@ -219,7 +219,7 @@ motionLoop.onchange = () => { void post('/api/playback/motion',{action:'configur
 document.querySelector<HTMLButtonElement>('#motion-export')!.onclick = async () => {
   try {
     const response = await fetch('/api/playback/motion'), result = await response.json();
-    if (!response.ok || !result.clip) throw new Error('モーションが読み込まれていません。');
+    if (!response.ok || !result.clip) throw new Error('No motion is loaded.');
     const url = URL.createObjectURL(new Blob([JSON.stringify(result.clip,null,2)+'\n'],{type:'application/json'}));
     const link = document.createElement('a'); link.href=url; link.download='motion.standrig-motion.json'; link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
   } catch (error) { report(error); }
@@ -235,10 +235,10 @@ events.addEventListener('playback', event => {
   if (previousVersion !== latest?.modelVersion || previousSession !== latest?.sessionId) void reload().catch(report);
   else applyState();
 });
-events.onerror = () => { status.textContent = '再生サービスへ再接続しています…'; };
+events.onerror = () => { status.textContent = 'Reconnecting to the playback service…'; };
 window.addEventListener('pagehide', () => { events.close(); poseInput.reset(); if (renderFrame !== undefined) cancelAnimationFrame(renderFrame); runtime?.dispose(); clearInterval(pointerTimer); });
 
 document.querySelector<HTMLButtonElement>("#bridge-check")!.onclick = async () => {
  const output = document.querySelector("#bridge-status")!;
- try { const response = await fetch("/api/bridge/status"); const {result:s} = await response.json(); output.textContent = !s?.configured ? "未設定" : !s.connected ? "接続できません" : `API ${s.apiVersion} / ${s.state}${s.supported ? "" : "（未対応）"}`; } catch { output.textContent = "接続確認に失敗しました"; }
+ try { const response = await fetch("/api/bridge/status"); const {result:s} = await response.json(); output.textContent = !s?.configured ? "Not configured" : !s.connected ? "Cannot connect" : `API ${s.apiVersion} / ${s.state}${s.supported ? "" : " (unsupported)"}`; } catch { output.textContent = "Failed to check the connection."; }
 };
